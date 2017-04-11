@@ -1,0 +1,11 @@
+{
+  "name": "swim-ui-core",
+  "version": "1.0.0",
+  "description": "ui components for swim dev, build real time apps fast",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

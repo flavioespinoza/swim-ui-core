@@ -65,10 +65,13 @@ d3.sankey = function() {
           x3 = xi(1 - curvature),
           y0 = d.source.y + d.sy + d.dy / 2,
           y1 = d.target.y + d.ty + d.dy / 2;
-      return "M" + x0 + "," + y0
+
+      var path = "M" + x0 + "," + y0
            + "C" + x2 + "," + y0
            + " " + x3 + "," + y1
            + " " + x1 + "," + y1;
+
+      return path;
     }
  
     link.curvature = function(_) {
@@ -181,12 +184,12 @@ d3.sankey = function() {
       nodesByBreadth.forEach(function(nodes) {
         nodes.forEach(function(node, i) {
           node.y = i;
-          node.dy = node.value * ky;
+          node.dy = 20; //height of node
         });
       });
  
       links.forEach(function(link) {
-        link.dy = link.value * ky;
+        link.dy = 20; //link.value * ky;
       });
     }
  

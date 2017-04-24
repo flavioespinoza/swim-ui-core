@@ -132,8 +132,10 @@ tag('x-swim-sankey', {
   
           // re-inflate from state store, then update from swim
           // service
-          d.x = sankeyStore[d.name][0];
-          d.y = sankeyStore[d.name][1];
+          if(sankeyStore && sankeyStore[d.name]) {
+            d.x = sankeyStore[d.name][0];
+            d.y = sankeyStore[d.name][1];
+          }
           // sankey.relayout();
 
           link.attr("d", function (d) {
@@ -141,7 +143,7 @@ tag('x-swim-sankey', {
             return p;
           });
 
-          return "translate(" + sankeyStore[d.name] + ")";
+          return  "translate(" + d.x + "," + d.y + ")";
 
       })
       .call(d3.behavior.drag()
@@ -198,5 +200,15 @@ tag('x-swim-sankey', {
       })
       .attr("x", 6 + sankey.nodeWidth())
       .attr("text-anchor", "start");
+
+
+      Draw(function(){
+        var state = Store.get(this.guid);
+        var drawPaths = state && state.pulsePaths.splice(10);
+        $(drawPaths).each(function(idx, value){
+          $('x-swim-sankey')[0].flowCircle(value.weight, $('path[data-link-name=' + value.loc + ']')[0])
+        });
+        Store.put(this.guid, state);
+      }.bind(this));
   }
 });

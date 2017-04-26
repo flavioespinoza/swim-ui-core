@@ -52,8 +52,7 @@ tag('x-swim-step-chart', {
     },
     methods: {
         removeAlertBars: function () {
-            var alertBar = d3.selectAll('.alert-bar');
-            console.log('alertBar', alertBar);
+            var alertBar = d3.selectAll(this).selectAll('.alert-bar');
             alertBar.remove();
         },
         getAlert: function (height) {
@@ -74,7 +73,6 @@ tag('x-swim-step-chart', {
                 var alert = this.getAlert(bbox.height);
                 var offset = (bbox.height - 4);
 
-                console.log('bbox', bbox);
                 parent.append('rect')
                     .attr('class', 'alert-bar')
                     .attr('width', bbox.width)
@@ -86,6 +84,7 @@ tag('x-swim-step-chart', {
             }
 
             bars.remove();
+
         }
     }
 

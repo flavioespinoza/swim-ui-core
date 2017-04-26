@@ -11,12 +11,16 @@ tag('x-swim-donut-chart', {
 
         _self._chart = c3.generate({
             bindto: $('.chart', _self)[0],
+            size: {
+                height: 240,
+                width: 240
+            },
             data: {
                 columns: _self.data,
                 type : 'donut',
                 colors: {
                     Uptime: '#709ed4',
-                    Downtime: '#DDDDDD'
+                    Downtime: '#bbbbbb'
                 },
                 onclick: function (d, i) { console.log("onclick", d, i); },
                 onmouseover: function (d, i) {  },

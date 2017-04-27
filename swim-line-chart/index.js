@@ -23,6 +23,9 @@ tag('x-swim-line-chart', {
             },
             tooltip: {
                 show: this._tooltip
+            },
+            transition: {
+                duration: 150
             }
         });
     },

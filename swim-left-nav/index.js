@@ -15,7 +15,7 @@ tag('x-swim-left-nav', {
             for (var i = 0; i < items.length; i++) {
 
                 $('.location-list', this).append( '       ' +
-                    '       <div class="location">  '  +
+                    '       <div class="location pointer">  '  +
                     '         <div class="location-wrapper">  '  +
                     '           <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored fl">  '  +
                     '             <i class="material-icons">dns</i>  '  +

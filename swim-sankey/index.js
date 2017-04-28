@@ -10,6 +10,14 @@ var sankeyStore = Store.get('sankey');
 
 tag('x-swim-sankey', {
   template: require('./template.html'),
+    draw: function(){
+       var state = Store.get(this.guid);
+        var drawPaths = state && state.pulsePaths.splice(10);
+        $(drawPaths).each(function(idx, value){
+          $('x-swim-sankey')[0].flowCircle(value.weight, $('path[data-link-name=' + value.loc + ']')[0])
+        });
+        Store.put(this.guid, state);
+},
   methods: {
     load: function (data) {
 
@@ -200,15 +208,5 @@ tag('x-swim-sankey', {
       })
       .attr("x", 6 + sankey.nodeWidth())
       .attr("text-anchor", "start");
-
-
-      Draw(function(){
-        var state = Store.get(this.guid);
-        var drawPaths = state && state.pulsePaths.splice(10);
-        $(drawPaths).each(function(idx, value){
-          $('x-swim-sankey')[0].flowCircle(value.weight, $('path[data-link-name=' + value.loc + ']')[0])
-        });
-        Store.put(this.guid, state);
-      }.bind(this));
   }
 });

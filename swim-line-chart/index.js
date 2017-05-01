@@ -87,20 +87,20 @@ tag('x-swim-line-chart', {
                 .transition()
                 .duration(duration)
                 .ease('linear')
-                .attr('transform', 'translate(' + x(now - (limit - 1) * duration) + ')')
-                .each('end', this._chart);
+                .attr('transform', 'translate(' + x(now - (limit - 1) * duration) + ')');
 
             // Remove oldest data point from each group
             for (var name in groups) {
                 var group = groups[name];
                 group.data.shift()
             }
+
         };
 
     },
     methods: {
-        load: function (obj) {
-            this._chart(obj)
+        load: function (data) {
+            this._chart(data)
         }
     },
     accessors: {

@@ -18,19 +18,19 @@ tag('x-swim-line-chart', {
             max: {
                 color: 'orange',
                 data: d3.range(limit).map(function () {
-                    return 0
+                    return 0;
                 })
             },
             mean: {
                 color: 'green',
                 data: d3.range(limit).map(function () {
-                    return 0
+                    return 0;
                 })
             },
             min: {
                 color: 'blue',
                 data: d3.range(limit).map(function () {
-                    return 0
+                    return 0;
                 })
             }
         };
@@ -46,10 +46,10 @@ tag('x-swim-line-chart', {
         var line = d3.svg.line()
             .interpolate('basis')
             .x(function (d, i) {
-                return x(now - (limit - 1 - i) * duration)
+                return x(now - (limit - 1 - i) * duration);
             })
             .y(function (d) {
-                return y(d)
+                return y(d);
             });
 
         var svg = d3.select(this).select('.chart').append('svg')
@@ -100,7 +100,8 @@ tag('x-swim-line-chart', {
     },
     methods: {
         load: function (data) {
-            this._chart(data)
+
+            this._chart(data);
         }
     },
     accessors: {

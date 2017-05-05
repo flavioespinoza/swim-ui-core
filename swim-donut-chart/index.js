@@ -9,6 +9,8 @@ tag('x-swim-donut-chart', {
         _self.data = _self.getData();
         var title = _self.data[0][1] + '%';
 
+        console.log('_self.data', JSON.stringify(_self.data));
+
         _self._chart = c3.generate({
             bindto: $('.chart', _self)[0],
             size: {

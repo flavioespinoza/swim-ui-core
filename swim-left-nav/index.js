@@ -30,7 +30,7 @@ tag('x-swim-left-nav', {
             _self.generateList(sorted);
         }, 2000);
 
-        $('.location-list div', this).on('click', function (e) {
+        $('.location-btn', this).on('click', function (e) {
             console.log('e', e);
         });
 
@@ -41,7 +41,7 @@ tag('x-swim-left-nav', {
             for (var i = 0; i < items.length; i++) {
 
                 $('.location-list', this).append('       ' +
-                    '       <div class="location pointer">  ' +
+                    '       <div class="location pointer location-btn">  ' +
                     '         <div class="location-wrapper">  ' +
                     '           <button class="list-btn mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored fl">  ' +
                     '             <i class="material-icons">dns</i>  ' +

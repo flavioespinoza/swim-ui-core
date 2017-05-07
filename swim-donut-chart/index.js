@@ -24,7 +24,9 @@ tag('x-swim-donut-chart', {
                     Uptime: '#709ed4',
                     Downtime: '#bbbbbb'
                 },
-                onclick: function (d, i) { console.log("onclick", d, i); },
+                onclick: function (d, i) {
+
+                },
                 onmouseover: function (d, i) {  },
                 onmouseout: function (d, i) {  }
             },

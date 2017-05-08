@@ -29,7 +29,6 @@ tag('x-swim-left-nav', {
         }, 2000);
 
         $('.keyboard-backspace', _self).on('click', function (e) {
-            console.log('e', e);
             $('.keyboard-backspace', _self).addClass('hidden');
             $('.dashboard', _self).removeClass('hidden');
             _self.generateList(_self.items);
@@ -43,18 +42,19 @@ tag('x-swim-left-nav', {
                 $('.dashboard', _self).addClass('hidden');
                 $('.keyboard-backspace', _self).removeClass('hidden');
 
-
                 this.generateList(_self.items);
 
                 var url = e.target.attributes['url'].value;
                 var location = e.target.attributes['location'].value;
-
 
                 var items = [{
                     location: location,
                     url: url
                 }];
                 _self.generateList(items);
+
+                // TODO: Flavio - Ask Derek how he wants this done.
+                // Dispatcher.dispatch(actions.SET_IT_DATA, url);
 
             }
 

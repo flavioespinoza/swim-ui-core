@@ -5,78 +5,124 @@ tag('x-swim-step-chart', {
     template: require('./template.html'),
     inserted: function () {
         var _self = this;
-
-        _self.dates = ['date'];
+        _self.dates = [];
         _self.connectivity = ['Connectivity'];
         _self.connectivityBar = ['Connectivity_bar'];
+
+        var array = [];
 
         Swim.downlink()
             .host('ws://sensornet.swim.services:80/?token=abcd')
             .node('org/NewOrg')
-            .lane('pzConnectionHistory')
+            .lane('readerConnectionHistory')
             .onEvent(function (message) {
 
                 var timestamp = message.body['@update'].key;
-                var date = moment(timestamp).format('ddd, MMM DD YYYY @ hh:mm:ss:SSS A');
                 var value = message.body[1];
-                _self.dates.push(date);
-                _self.connectivity.push(value);
-                _self.connectivityBar.push(value);
+
+                array.push({
+                    date: timestamp,
+                    close: value
+                });
 
             })
             .sync();
 
         setTimeout(function () {
 
-            console.log('_self.dates.length', _self.dates.length);
-            console.log('_self.dates', _self.dates);
-
-            _self._chart = c3.generate({
-                bindto: $('.chart', this)[0],
-                padding: {
-                    left: 48,
-                    right: 48
-                },
-                data: {
-                    x: 'date',
-                    columns: [
-                        // _self.dates,
-                        // _self.connectivity,
-                        // _self.connectivityBar
-                    ],
-                    type: 'area-step',
-                    types: {
-                        Connectivity_bar: 'bar'
-                    },
-                    colors: {
-                        Connectivity: '#709ed4',
-                        Connectivity_bar: 'red'
-                    }
-                },
-                bar: {
-                    width: {
-                        ratio: 1
-                    }
-                },
-                axis: {
-                    x: {
-                        type: 'timeseries'
-                    },
-                    y: {
-                        show: false
-                    }
-                },
-                legend: {
-                    show: false
-                }
+            var sorted = _.sortedUniq(array, function (obj) {
+                return obj.timestamp;
             });
+            
+            var margin = {top: 20, right: 50, bottom: 30, left: 50},
+                width = 996 - margin.left - margin.right,
+                height = 224 - margin.top - margin.bottom;
 
-            _self.removeAlertBars();
-            _self.createAlertBars();
+            var x = d3.time.scale()
+                .range([0, width]);
 
-        }, 5000);
+            var y = d3.scale.linear()
+                .range([height, 0]);
 
+            var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient('bottom');
 
+            var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient('left');
+
+            var line = d3.svg.area()
+                .x(function (d) {
+                    return x(d.date);
+                })
+                .y(function (d) {
+                    return y(d.close);
+                });
+
+            line.interpolate('step-after');
+            //line.interpolate('step-before');
+
+            var svg = d3.select(_self).select('.chart').append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+            var data = sorted;
+
+            x.domain(d3.extent(data, function (d) {
+                return d.date;
+            }));
+            y.domain(d3.extent(data, function (d) {
+                return d.close;
+            }));
+
+            svg.append('g')
+                .attr('class', 'x axis')
+                .attr('transform', 'translate(0,' + height + ')')
+                .call(xAxis);
+
+            svg.append('g')
+                .attr('class', 'y axis')
+                .call(yAxis)
+                .append('text')
+                .attr('transform', 'rotate(-90)')
+                .attr('y', 6)
+                .attr('dy', '.71em')
+                .style('text-anchor', 'end')
+                .text('Readers');
+
+            // draw the data as an svg path
+            svg.append('path')
+                .datum(data)
+                .attr('class', 'line')
+                .attr('d', line);
+
+            // draw the data points as circles
+            svg.selectAll('rect')
+                .data(data)
+                .enter().append('svg:rect')
+                .attr('x', function (d) {
+                    return x(d.date)
+                })
+                .attr('y', function (d) {
+                    return y(d.close)
+                })
+                .attr('stroke-width', 2)
+                .attr('stroke', 'steelblue')
+                .attr('fill', 'orange')
+                .attr('fill-opacity', .5)
+                .attr('width', 15)
+                .attr('height', 4)
+                .on('mouseover', function (d) {
+                    console.log('d', d);
+                })
+
+        }, 2000);
+
+        // _self.removeAlertBars();
+        // _self.createAlertBars();
 
     },
     methods: {
@@ -93,7 +139,7 @@ tag('x-swim-step-chart', {
         },
         createAlertBars: function () {
 
-            var bars = d3.selectAll('path.c3-bar');
+            var bars = d3.selectAll(this).selectAll('path.c3-bar');
             var __bars = bars[0];
 
             for (var i = 0; i < __bars.length; i++) {

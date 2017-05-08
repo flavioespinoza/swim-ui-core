@@ -10,8 +10,37 @@ x-swim-step-chart {
     }
 }
 
+.chart-wrapper {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    form {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
+}
+
 .chart {
     height: 100%;
     width: 100%;
     display: block;
+}
+
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
 }

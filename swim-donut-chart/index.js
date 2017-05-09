@@ -6,9 +6,6 @@ tag('x-swim-donut-chart', {
     draw: function () {
         var lane = this.attributes['data-lane'].nodeValue;
 
-        console.log('this.guid', this.guid);
-        console.log('lane', lane);
-
         var state = Store.get(this.guid);
 
         if (state) {
@@ -23,7 +20,17 @@ tag('x-swim-donut-chart', {
 
         var _self = this;
         _self.data = _self.getData();
-        var title = _self.data[0][1] + '%';
+
+        var title = _self.attributes['data-title'].nodeValue;
+        $('.donut-title', _self).html(title);
+
+        if (_self.attributes['data-subchart']) {
+            $('.donut-sub-chart', _self).removeClass('hidden');
+            var subtitle = _self.attributes['data-subtitle'].nodeValue;
+            $('.donut-sub-title', _self).html(subtitle);
+        }
+
+        var center = _self.data[0][1] + '%';
 
         _self._chart = c3.generate({
             bindto: $('.chart', _self)[0],
@@ -49,7 +56,7 @@ tag('x-swim-donut-chart', {
                 }
             },
             donut: {
-                title: title
+                title: center
             },
             legend: {
                 show: true

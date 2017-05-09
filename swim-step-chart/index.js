@@ -9,6 +9,9 @@ tag('x-swim-step-chart', {
         _self.connectivity = ['Connectivity'];
         _self.connectivityBar = ['Connectivity_bar'];
 
+        var title = _self.attributes['data-title'].nodeValue;
+        $('.step-title', _self).html(title);
+
         var array = [];
 
         Swim.downlink()
@@ -28,101 +31,7 @@ tag('x-swim-step-chart', {
             })
             .sync();
 
-        setTimeout(function () {
 
-            var sorted = _.sortedUniq(array, function (obj) {
-                return obj.timestamp;
-            });
-            
-            var margin = {top: 20, right: 50, bottom: 30, left: 50},
-                width = 996 - margin.left - margin.right,
-                height = 224 - margin.top - margin.bottom;
-
-            var x = d3.time.scale()
-                .range([0, width]);
-
-            var y = d3.scale.linear()
-                .range([height, 0]);
-
-            var xAxis = d3.svg.axis()
-                .scale(x)
-                .orient('bottom');
-
-            var yAxis = d3.svg.axis()
-                .scale(y)
-                .orient('left');
-
-            var line = d3.svg.area()
-                .x(function (d) {
-                    return x(d.date);
-                })
-                .y(function (d) {
-                    return y(d.close);
-                });
-
-            line.interpolate('step-after');
-            //line.interpolate('step-before');
-
-            var svg = d3.select(_self).select('.chart').append('svg')
-                .attr('width', width + margin.left + margin.right)
-                .attr('height', height + margin.top + margin.bottom)
-                .append('g')
-                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-            var data = sorted;
-
-            x.domain(d3.extent(data, function (d) {
-                return d.date;
-            }));
-            y.domain(d3.extent(data, function (d) {
-                return d.close;
-            }));
-
-            svg.append('g')
-                .attr('class', 'x axis')
-                .attr('transform', 'translate(0,' + height + ')')
-                .call(xAxis);
-
-            svg.append('g')
-                .attr('class', 'y axis')
-                .call(yAxis)
-                .append('text')
-                .attr('transform', 'rotate(-90)')
-                .attr('y', 6)
-                .attr('dy', '.71em')
-                .style('text-anchor', 'end')
-                .text('Readers');
-
-            // draw the data as an svg path
-            svg.append('path')
-                .datum(data)
-                .attr('class', 'line')
-                .attr('d', line);
-
-            // draw the data points as circles
-            svg.selectAll('rect')
-                .data(data)
-                .enter().append('svg:rect')
-                .attr('x', function (d) {
-                    return x(d.date)
-                })
-                .attr('y', function (d) {
-                    return y(d.close)
-                })
-                .attr('stroke-width', 2)
-                .attr('stroke', 'steelblue')
-                .attr('fill', 'orange')
-                .attr('fill-opacity', .5)
-                .attr('width', 15)
-                .attr('height', 4)
-                .on('mouseover', function (d) {
-                    console.log('d', d);
-                })
-
-        }, 2000);
-
-        // _self.removeAlertBars();
-        // _self.createAlertBars();
 
     },
     methods: {

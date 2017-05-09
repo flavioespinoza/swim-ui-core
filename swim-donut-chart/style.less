@@ -1,56 +1,60 @@
 x-swim-donut-chart {
-  height: 300px;
-  .donut-chart {
-    width: 100%;
     height: 300px;
-    float: left;
-  }
+    .donut-chart {
+        width: 100%;
+        height: 300px;
+        float: left;
+    }
 
-  .chart {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 240px;
-    width: 240px;
-    padding: 30px;
+    .donut-title {
+        font-size: 13px;
+    }
 
-  }
+    .chart {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 240px;
+        width: 240px;
+        padding: 30px;
 
-  .info {
-    position: absolute;
-    top: 0;
-    left: 300px;
-    width: calc(~'(100% - 300px)');
-    height: 300px;
-  }
+    }
 
-  .info-wrapper {
-    padding-top: 62px;
-    padding-right: 42px;
-  }
+    .info {
+        position: absolute;
+        top: 0;
+        left: 300px;
+        width: calc(~'(100% - 300px)');
+        height: 300px;
+    }
 
-  .title, .divider {
-    float: left;
-    clear: both;
-    padding: 2px;
-  }
+    .info-wrapper {
+        padding-top: 62px;
+        padding-right: 42px;
+    }
 
-  .value {
-    float: right;
-    padding: 2px;
-  }
+    .title, .divider {
+        float: left;
+        clear: both;
+        padding: 2px;
+    }
 
-  .divider {
-    width: 100%;
-    height: 2px;
-    padding-top: 12px;
-    margin-bottom: 12px;
-    border-bottom: 1px solid grey;
-  }
+    .value {
+        float: right;
+        padding: 2px;
+    }
 
-  text.c3-chart-arcs-title {
-    font-size: 2.5em;
-    fill: #709ed4;
-  }
+    .divider {
+        width: 100%;
+        height: 2px;
+        padding-top: 12px;
+        margin-bottom: 12px;
+        border-bottom: 1px solid grey;
+    }
+
+    text.c3-chart-arcs-title {
+        font-size: 2.5em;
+        fill: #709ed4;
+    }
 
 }

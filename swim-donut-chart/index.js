@@ -1,5 +1,4 @@
 require('./style.less');
-var c3 = require('c3');
 
 tag('x-swim-donut-chart', {
     template: require('./template.html'),
@@ -84,18 +83,6 @@ tag('x-swim-donut-chart', {
                 return d;
             });
 
-    },
-    methods: {
-        getData: function () {
-            return [['Uptime', 0], ['Downtime', 100]]
-        }
     }
 
 });
-
-
-function arcTween(d) {
-    var i = d3.interpolate(this._current, d);
-    this._current = i(0);
-    return function(t) { return arc(i(t)); };
-}

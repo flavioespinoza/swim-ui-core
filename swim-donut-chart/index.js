@@ -4,17 +4,27 @@ var c3 = require('c3');
 tag('x-swim-donut-chart', {
     template: require('./template.html'),
     draw: function () {
-        var lane = this.attributes['data-lane'].nodeValue;
 
-        var state = Store.get(this.guid);
+        var lane = this.attributes['data-lane'].nodeValue;
+        var guid = this.guid;
+        var state = Store.get(guid);
 
         if (state) {
             if (state.week) {
-                this._chart.load({
-                    columns: [['Uptime', state.week], ['Downtime', (100 - state.week)]]
-                });
+
+                var dataset = {
+                    value: [state.week, 100 - state.week]
+                };
+
+                console.log('dataset', dataset.value);
+
+                this._path = this._path.data(this._pie(dataset.value)); // compute the new angles
+                this._path.attr("d", this._arc); // redraw the arcs
+                this._text.text(dataset.value[0] + '%')
+
             }
         }
+
     },
     inserted: function () {
 
@@ -30,38 +40,50 @@ tag('x-swim-donut-chart', {
             $('.donut-sub-title', _self).html(subtitle);
         }
 
-        var center = _self.data[0][1] + '%';
+        var dataset = {
+            value: [0, 100]
+        };
 
-        _self._chart = c3.generate({
-            bindto: $('.chart', _self)[0],
-            size: {
-                height: 240,
-                width: 240
-            },
-            data: {
-                columns: _self.data,
-                type: 'donut',
-                colors: {
-                    Uptime: '#709ed4',
-                    Downtime: '#bbbbbb'
-                },
-                onclick: function (d, i) {
+        var width = $('.chart', this).width();
+        var height = $('.chart', this).height();
 
-                },
-                onmouseover: function (d, i) {
+        _self._radius = Math.min(width, height) / 2;
 
-                },
-                onmouseout: function (d, i) {
+        _self._color = d3.scale.category20();
 
-                }
-            },
-            donut: {
-                title: center
-            },
-            legend: {
-                show: true
-            }
-        });
+        _self._pie = d3.layout.pie()
+            .sort(null);
+
+        _self._arc = d3.svg.arc()
+            .innerRadius(_self._radius - 12)
+            .outerRadius(_self._radius - 48);
+
+        _self._svg = d3.select(_self).select('.chart').append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+        _self._path = _self._svg.selectAll("path")
+            .data(_self._pie(dataset.value))
+            .enter().append("path")
+            .attr("fill", function (d, i) {
+                return _self._color(i);
+            })
+            .attr("d", _self._arc);
+
+        _self._text = d3.select(this).select('svg')
+            .data(dataset.value)
+            .append('text')
+            .attr('text-anchor', 'middle')
+            .attr('y', height / 2)
+            .attr('x', width / 2)
+            .attr('font-size', '20px')
+            .text(function (d) {
+                console.log('d', d);
+                return d;
+            });
+
     },
     methods: {
         getData: function () {
@@ -70,3 +92,10 @@ tag('x-swim-donut-chart', {
     }
 
 });
+
+
+function arcTween(d) {
+    var i = d3.interpolate(this._current, d);
+    this._current = i(0);
+    return function(t) { return arc(i(t)); };
+}

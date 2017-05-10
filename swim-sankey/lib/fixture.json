@@ -40,38 +40,101 @@
         }
     ],
     "nodes": [{
-            "name": "Location 0001"
+            "name": "Location 0001",
+            "color": "red",
+            "summary": [
+            	["data1", 30],
+            	["data2", 56],
+            	["data3", 50],
+            	["data4", 120]
+            ]
         },
         {
-            "name": "Location 0002"
+            "name": "Location 0002",
+            "color": "red",
+            "summary": [
+            	["data1", 30],
+            	["data2", 30],
+            	["data3", 50],
+            	["data4", 30]
+            ]
         }
         ,
         {
-            "name": "Location 0003"
+            "name": "Location 0003",
+            "color": "red",
+            "summary": [
+            	["data1", 30],
+            	["data2", 120],
+            	["data3", 50],
+            	["data4", 220]
+            ]
         }
         ,
         {
-            "name": "Location 0004"
+            "name": "Location 0004",
+            "color": "red",
+            "summary": [
+            	["data1", 30],
+            	["data2", 120],
+            	["data3", 50],
+            	["data4", 220]
+            ]
         }
         ,
         {
-            "name": "Location 0005"
+            "name": "Location 0005",
+            "color": "red",
+            "summary": [
+            	["data1", 30],
+            	["data2", 30],
+            	["data3", 30],
+            	["data4", 220]
+            ]
         }
         ,
         {
-            "name": "Location 0006"
+            "name": "Location 0006",
+            "color": "red",
+            "summary": [
+            	["data1", 30],
+            	["data2", 320],
+            	["data3", 50],
+            	["data4", 120]
+            ]
         }
         ,
         {
-            "name": "Location 0007"
+            "name": "Location 0007",
+            "color": "red",
+            "summary": [
+            	["data1", 30],
+            	["data2", 120],
+            	["data3", 50],
+            	["data4", 220]
+            ]
         }
         ,
         {
-            "name": "Location 0008"
+            "name": "Location 0008",
+            "color": "red",
+            "summary": [
+            	["data1", 30],
+            	["data2", 45],
+            	["data3", 50],
+            	["data4", 20]
+            ]
         }
         ,
         {
-            "name": "Location 0009"
+            "name": "Location 0009",
+            "color": "red",
+            "summary": [
+            	["data1", 30],
+            	["data2", 45],
+            	["data3", 50],
+            	["data4", 220]
+            ]
         }
 
     ]

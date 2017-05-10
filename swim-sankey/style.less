@@ -1,24 +1,42 @@
-.node rect {
-  cursor: move;
-  fill-opacity: .9;
-  shape-rendering: crispEdges;
-}
- 
-.node text {
-  pointer-events: none;
-  text-shadow: 0 1px 0 #fff;
-}
- 
-.link {
-  fill: none;
-  stroke: #000;
-  stroke-opacity: .2;
-}
- 
-.link:hover {
-  stroke-opacity: .5;
-}
 
-svg circle {
-  fill: #ffc107;
+
+x-swim-sankey {
+  .node rect {
+    cursor: move;
+    fill-opacity: .9;
+    shape-rendering: crispEdges;
+  }
+  
+  .node text {
+    pointer-events: none;
+    text-shadow: 0 1px 0 #fff;
+  }
+  
+  .link {
+    fill: none;
+    stroke: #000;
+    stroke-opacity: .2;
+  }
+  
+  .link:hover {
+    stroke-opacity: .5;
+  }
+
+  svg circle {
+    fill: #ffc107;
+  }
+
+  x-swim-chart-tooltip {
+    position:absolute;
+    z-index: 999;
+  }
+  
+  .info {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    opacity: 0.5;
+	}
 }

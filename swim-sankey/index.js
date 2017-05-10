@@ -1,30 +1,25 @@
 require('./style.less');
-
-var d3 = require('d3');
 require('./lib/sankey.js');
 
+require('../swim-chart-tooltip');
 
-
-
+var d3 = require('d3');
 var sankeyStore = Store.get('sankey');
 
 tag('x-swim-sankey', {
   template: require('./template.html'),
-    draw: function(){
-       var state = Store.get(this.guid);
-        var drawPaths = state && state.pulsePaths.splice(10);
-        $(drawPaths).each(function(idx, value){
-          $('x-swim-sankey')[0].flowCircle(value.weight, $('path[data-link-name=' + value.loc + ']')[0])
-        });
-        Store.put(this.guid, state);
-},
+  draw: function () {
+    var state = Store.get(this.guid);
+    var drawPaths = state && state.pulsePaths.splice(10);
+    $(drawPaths).each(function (idx, value) {
+      $('x-swim-sankey')[0].flowCircle(value.weight, $('path[data-link-name=' + value.loc + ']')[0])
+    });
+    Store.put(this.guid, state);
+  },
   methods: {
-    load: function (data) {
-
-    },
     // draw a Circle that flows down a path on the sankey
     // path name is a source.name + target.name with scrubbed spaces
-    flowCircle: function flowCircle(diameter, path) {
+    flowCircle: function flowCircle(diameter, path, color) {
 
       //Get path start point for placing marker
       function pathStartPoint(path) {
@@ -38,6 +33,9 @@ tag('x-swim-sankey', {
 
       marker.attr("r", diameter)
         .attr("class", "circle")
+        .style("fill", function () {
+          if (color) return color;
+        })
         .attr("transform", "translate(" + startPoint + ")");
 
       marker.transition()
@@ -60,6 +58,8 @@ tag('x-swim-sankey', {
   },
   inserted: function () {
 
+    var tooltip = $('x-swim-chart-tooltip', this)[0];
+
     var margin = {
         top: 10,
         right: 10,
@@ -67,10 +67,10 @@ tag('x-swim-sankey', {
         left: 10
       },
 
-    width = $(this).width() - margin.left - margin.right,
+      width = $(this).width() - margin.left - margin.right,
 
-    //todo: this is a hack right now, to fit into an app, fix fix fix
-    height = $(this).height() - 64 - margin.top - margin.bottom;
+      //todo: this is a hack right now, to fit into an app, fix fix fix
+      height = $(this).height() - 64 - margin.top - margin.bottom;
 
     // append the svg canvas to the page
     this.svg
@@ -137,21 +137,21 @@ tag('x-swim-sankey', {
       .enter().append("g")
       .attr("class", "node")
       .attr("transform", function (d) {
-  
-          // re-inflate from state store, then update from swim
-          // service
-          if(sankeyStore && sankeyStore[d.name]) {
-            d.x = sankeyStore[d.name][0];
-            d.y = sankeyStore[d.name][1];
-          }
-          // sankey.relayout();
 
-          link.attr("d", function (d) {
-            var p = path(d);
-            return p;
-          });
+        // re-inflate from state store, then update from swim
+        // service
+        if (sankeyStore && sankeyStore[d.name]) {
+          d.x = sankeyStore[d.name][0];
+          d.y = sankeyStore[d.name][1];
+        }
+        // sankey.relayout();
 
-          return  "translate(" + d.x + "," + d.y + ")";
+        link.attr("d", function (d) {
+          var p = path(d);
+          return p;
+        });
+
+        return "translate(" + d.x + "," + d.y + ")";
 
       })
       .call(d3.behavior.drag()
@@ -159,25 +159,26 @@ tag('x-swim-sankey', {
           this.parentNode.appendChild(this);
         })
         .on("drag", function dragmove(d) {
-              var sankeyStore = Store.get('sankey') || {};
+          var sankeyStore = Store.get('sankey') || {};
 
-              d3.select(this).attr("transform",
-                "translate(" + (
-                  d.x = Math.max(0, Math.min(width - d.dx, d3.event.x))
-                ) + "," + (
-                  d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))
-                ) + ")");
+          d3.select(this).attr("transform",
+            "translate(" + (
+              d.x = Math.max(0, Math.min(width - d.dx, d3.event.x))
+            ) + "," + (
+              d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))
+            ) + ")");
 
-              sankeyStore[d.name] = [d.x, d.y];
-              Store.put('sankey', sankeyStore);
+          sankeyStore[d.name] = [d.x, d.y];
+          Store.put('sankey', sankeyStore);
 
-              sankey.relayout();
+          sankey.relayout();
 
-              link.attr("d", function (d) {
-                var p = path(d);
-                return p;
-              });
-        }));
+          link.attr("d", function (d) {
+            var p = path(d);
+            return p;
+          });
+        })
+    );
 
     // add the rectangles for the nodes
     node.append("rect")
@@ -185,7 +186,11 @@ tag('x-swim-sankey', {
         return d.dy;
       })
       .attr("width", sankey.nodeWidth())
-      .style("fill", '#709ed4')
+      .style("fill", function (d) {
+        var state = sankeyStore[d.name];
+        var color = state.color || d.color || '#709ed4';
+        return color;
+      }) // change color of fill if node has color
       .append("title")
       .text(function (d) {
         return d.name;
@@ -208,5 +213,21 @@ tag('x-swim-sankey', {
       })
       .attr("x", 6 + sankey.nodeWidth())
       .attr("text-anchor", "start");
+
+    // position and update the tooltip
+    node.on("mouseover", function(d){
+      return $(tooltip).toggle();
+    })
+    .on("mousemove", function(d){
+    	Store.put($(tooltip)[0].guid, d.summary);
+    	$(tooltip)[0].location = d.name;
+      return $(tooltip)
+                .css('top', (d3.event.pageY-10) + 'px')
+                .css('left', (d3.event.pageX+10) + 'px');
+    })
+    .on("mouseout", function(){
+      return $(tooltip).toggle();
+    });
+
   }
 });

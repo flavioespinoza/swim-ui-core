@@ -19,7 +19,7 @@ tag('x-swim-donut-chart', {
 
                 this._path = this._path.data(this._pie(dataset.value)); // compute the new angles
                 this._path.attr("d", this._arc); // redraw the arcs
-                this._text.text(dataset.value[0] + '%')
+                this._text.text(dataset.value[0] + '%'); // update text
 
             }
         }
@@ -28,7 +28,6 @@ tag('x-swim-donut-chart', {
     inserted: function () {
 
         var _self = this;
-        _self.data = _self.getData();
 
         var title = _self.attributes['data-title'].nodeValue;
         $('.donut-title', _self).html(title);

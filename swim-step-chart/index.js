@@ -3,14 +3,35 @@ var c3 = require('c3');
 
 tag('x-swim-step-chart', {
     template: require('./template.html'),
+    draw: function () {
+
+        var lane = this.attributes['data-lane'].nodeValue;
+        var guid = this.guid;
+        var state = Store.get(guid);
+        var data = [];
+
+        if (state) {
+
+            console.log('state', state);
+
+            // if (state.body[0]['@update'][0].key) {
+            //
+            //     console.log('x-swim-step-chart state', state);
+            //     data.push({
+            //         timestamp: state.body[0]['@update'][0].key,
+            //         value: state.body[1]
+            //     });
+            //
+            // }
+
+        }
+    },
     inserted: function () {
+
         var _self = this;
         _self.dates = [];
         _self.connectivity = ['Connectivity'];
         _self.connectivityBar = ['Connectivity_bar'];
-
-        var title = _self.attributes['data-title'].nodeValue;
-        $('.step-title', _self).html(title);
 
         var array = [];
 
@@ -31,45 +52,13 @@ tag('x-swim-step-chart', {
             })
             .sync();
 
-
+        setTimeout(function () {
+            console.log('array', array);
+        }.bind(this), 2000);
 
     },
     methods: {
-        removeAlertBars: function () {
-            var alertBar = d3.selectAll(this).selectAll('.alert-bar');
-            alertBar.remove();
-        },
-        getAlert: function (height) {
-            if (height < 100) {
-                return '#ffc107';
-            } else {
-                return '#709ed4';
-            }
-        },
-        createAlertBars: function () {
 
-            var bars = d3.selectAll(this).selectAll('path.c3-bar');
-            var __bars = bars[0];
-
-            for (var i = 0; i < __bars.length; i++) {
-                var parent = d3.select(__bars[i].parentNode);
-                var bbox = __bars[i].getBBox();
-                var alert = this.getAlert(bbox.height);
-                var offset = (bbox.height - 4);
-
-                parent.append('rect')
-                    .attr('class', 'alert-bar')
-                    .attr('width', bbox.width)
-                    .attr('height', bbox.height - offset)
-                    .attr('x', bbox.x)
-                    .attr('y', bbox.y - 4)
-                    .attr('fill', alert)
-                    .attr('fill-opacity', 1)
-            }
-
-            bars.remove();
-
-        }
     }
 
 });

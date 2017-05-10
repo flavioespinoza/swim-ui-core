@@ -215,10 +215,12 @@ tag('x-swim-sankey', {
       .attr("text-anchor", "start");
 
     // position and update the tooltip
-    node.on("mouseover", function(){
+    node.on("mouseover", function(d){
       return $(tooltip).toggle();
     })
-    .on("mousemove", function(){
+    .on("mousemove", function(d){
+    	Store.put($(tooltip)[0].guid, d.summary);
+    	$(tooltip)[0].location = d.name;
       return $(tooltip)
                 .css('top', (d3.event.pageY-10) + 'px')
                 .css('left', (d3.event.pageX+10) + 'px');

@@ -6,8 +6,8 @@ tag('x-swim-donut-chart', {
     draw: function () {
         var lane = this.attributes['data-lane'].nodeValue;
 
-        console.log('this.guid', this.guid);
-        console.log('lane', lane);
+        // console.log('this.guid', this.guid);
+        // console.log('lane', lane);
 
         var state = Store.get(this.guid);
 

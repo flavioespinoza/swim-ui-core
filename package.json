@@ -1,6 +1,6 @@
 {
   "name": "swim-ui-core",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "ui components for swim dev, build real time apps fast",
   "main": "index.js",
   "scripts": {
